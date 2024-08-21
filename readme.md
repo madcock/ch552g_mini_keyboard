@@ -1,5 +1,42 @@
 # USB Mini Keyboard with CH552G
 
+## About This Fork
+
+Configuration changes:
+- increased total configurations to 9 (from 4)
+- reworked colors assigned to configurations
+- changing configurations is now done with encoder knob (no need to press it); sadly, this also means the encoder knob cannot be assigned to keys/mouse/etc.
+- each configuration supports 4 buttons (3 main plus encoder button press)
+- 36 (9x4) different button assignments are possible across the 9 configurations
+- default configuration is assigned to (usually) available mappings:
+	- F13, F14, F15, F16 (red)
+	- F17, F18, F19, F20 (green)
+	- F21, F22, F23, F24 (blue)
+	- LCTRL+F13, LCTRL+F14, LCTRL+F15, LCTRL+F16 (orange)
+	- LCTRL+F17, LCTRL+F18, LCTRL+F19, LCTRL+F20 (teal)
+	- LCTRL+F21, LCTRL+F22, LCTRL+F23, LCTRL+F24 (purple)
+	- LALT+F13, LALT+F14, LALT+F15, LALT+F16 (yellow)
+	- LALT+F17, LALT+F18, LALT+F19, LALT+F20 (cyan)
+	- LALT+F21, LALT+F22, LALT+F23, LALT+F24 (magenta)
+- all the other features from the original repo's default configuration examples should still work, except for AUTO_KEYBOARD and AUTO_MOUSE
+
+*NOTE: Code space was limited enough that I had to compromise on the configuration. Being able to switch between more buttons (arguably a ridiculous number now!) seemed more useful than the knob as a mappable input, especially since the Arduino doesn't have a way to map it to the media keys (like volume) by default. There are extra libraries that could be used for that, or it could be hard-coded, but given the free space this seemed impossible anyway.*
+
+To reclaim space:
+- removed LED loop effect mode (I disliked the constant pulsing colors anyway)
+- removed AUTO (repeat) modes
+
+Fixes:
+- always set colors when entering bootloader mode (in original repo, this is only done when holding encoder button in at connect, but not when pressing all buttons)
+- additional code cleanup (there was an unused BLINK mode, and some other minor stuff)
+
+Huge thanks to the original repo developer for creating this great project, reverse engineering the hardware, and providing an excellent custom firmware along with the sources!
+
+I also got the device from Aliexpress, for about $7 here: https://www.aliexpress.us/item/3256805669009569.html
+It's quite solid and with this custom firmware it's an incredible deal.
+
+---
+
 ## Introduction
 This project began with the purchase of a compact USB keyboard with three keys from AliExpress, seemingly without any specific purpose in mind. The original software required for this keyboard was provided as a .exe file, which I downloaded from a Google Drive repository. However, since I don't have access to a Windows PC to test it, I'm quite certain that most antivirus software would not approve of it.
 
