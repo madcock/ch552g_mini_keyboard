@@ -1,22 +1,12 @@
 #include <Arduino.h>
 #include "userUsbHidKeyboardMouse/USBHIDKeyboardMouse.h"
-#include "auto_mode.h"
 #include "led.h"
 #include "keyboard.h"
 #include "../configuration.h"
 
-#define MENU_CONF NUM_CONFIGURATION - 1
-
 static int current_mode_s = 0;                                       // current mode of keyboard
-static int menu_mode_s = 0;                                          // during menu coice
-
 
 static void set_menu_led(void);
-static void enter_menu(void);
-static void keyboard_press_mode_1(keyboard_button_t button, keyboard_button_keyboard_mode_t mode);
-static void keyboard_press_mode_2(keyboard_button_t button, keyboard_button_keyboard_mode_t mode);
-static void keyboard_press_auto(keyboard_button_t button, keyboard_button_keyboard_mode_t mode);
-static void keyboard_press_menu(keyboard_button_t button, keyboard_button_keyboard_mode_t mode);
 
 // ===================================================================================
 // create keyboard configuration
@@ -32,42 +22,36 @@ const button_function_t button_function_null = {
 static void set_menu_led(void)
 {
 
-  int led_index = menu_mode_s % 3;
-  int color_background = NEO_CYAN + (menu_mode_s / 3) * 32;
+  int led_index = current_mode_s % 3;
+  int color_background = (current_mode_s / 3) * 16;
 
-  led_set_mode(LED_FIX);
-  led_set_color_hue((led_index == 0) ? NEO_RED : color_background,
-                    (led_index == 1) ? NEO_RED : color_background,
-                    (led_index == 2) ? NEO_RED : color_background);
-}
-
-void keyboard_press_enc(keyboard_button_keyboard_mode_t mode)
-{
-  if (mode == BTM_PRESS)
-  {
-    auto_set_cycle(button_function_null);
-    menu_mode_s = current_mode_s;
-    current_mode_s = MENU_CONF;
-    set_menu_led();
-  }
-  if (mode == BTM_RELEASE)
-  {
-    current_mode_s = menu_mode_s;
-    led_set_mode(LED_LOOP);
-  }
+  switch (led_index)
+    {
+    case 0:
+      led_set_color_hue(NEO_RED + color_background, NEO_RED + color_background, NEO_RED + color_background);
+      break;
+    case 1:
+      led_set_color_hue(NEO_GREEN + color_background, NEO_GREEN + color_background, NEO_GREEN + color_background);
+      break;
+    case 2:
+      led_set_color_hue(NEO_BLUE + color_background, NEO_BLUE + color_background, NEO_BLUE + color_background);
+      break;
+    default:
+      break;
+    }
 }
 
 void button_menu_up(keyboard_button_keyboard_mode_t mode)
 {
   if (mode == BTM_CLICK)
   {
-    if (menu_mode_s >= MENU_CONF - 1)
+    if (current_mode_s >= NUM_CONFIGURATION - 1)
     {
-      menu_mode_s = MENU_CONF - 1;
+      current_mode_s = NUM_CONFIGURATION - 1;
     }
     else
     {
-      menu_mode_s++;
+      current_mode_s++;
     }
     set_menu_led();
   }
@@ -77,13 +61,13 @@ void button_menu_down(keyboard_button_keyboard_mode_t mode)
 {
   if (mode == BTM_CLICK)
   {
-    if (menu_mode_s <= 0)
+    if (current_mode_s <= 0)
     {
-      menu_mode_s = 0;
+      current_mode_s = 0;
     }
     else
     {
-      menu_mode_s--;
+      current_mode_s--;
     }
     set_menu_led();
   }
@@ -181,33 +165,12 @@ void keyboard_press_button(keyboard_button_t button, keyboard_button_keyboard_mo
   case BUTTON_MOUSE:
     keyboard_run_mouse_sequence(configurations[current_mode_s].button[button].function.mouse, mode);
     break;
-  case BUTTON_AUTO_KEYBOARD:
-    if (mode == BTM_PRESS)
-    {
-      auto_set_cycle(configurations[current_mode_s].button[button]);
-    }
-    break;
-  case BUTTON_AUTO_MOUSE:
-    if (mode == BTM_PRESS)
-    {
-      auto_set_cycle(configurations[current_mode_s].button[button]);
-    }
-    break;
   case BUTTON_FUNCTION:
     configurations[current_mode_s].button[button].function.functionPointer(mode);
     break;
   case BUTTON_NULL:
-    if (mode == BTM_PRESS)
-    {
-      auto_set_cycle(configurations[current_mode_s].button[button]);
-    }
     break;
   default:
     break;
   }
-}
-
-void keyboard_setup()
-{
-
 }

@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#define NUM_CONFIGURATION 5
+#define NUM_CONFIGURATION 9
 typedef enum 
 {
   BTN_1,
@@ -52,8 +52,6 @@ typedef enum
 {
   BUTTON_SEQUENCE, // send button_sequence_t tyoe
   BUTTON_MOUSE,    // send button_mouse_t type
-  BUTTON_AUTO_KEYBOARD,    // send continuosly button_sequence_t tyoe
-  BUTTON_AUTO_MOUSE,    // send continuosly button_mouse_t type
   BUTTON_FUNCTION, // send function pointer
   BUTTON_NULL, // dont do nothing
 }keyboard_button_type;
@@ -90,9 +88,6 @@ typedef struct
 
 // keyboard_press_button is called
 void keyboard_press_button( keyboard_button_t button,  keyboard_button_keyboard_mode_t mode);
-
-// keyboard setup 
-void keyboard_setup(void);
 
 // keyboard encoder press to enter in menu
 void keyboard_press_enc(keyboard_button_keyboard_mode_t mode);

@@ -3,6 +3,8 @@
 #include "keyboard.h"
 #include "util.h"
 #include "buttons.h"
+#include "neo/neo.h"
+#include "led.h"
 
 // Button pins
 static uint8_t pin_btn_1_s;
@@ -100,6 +102,10 @@ void buttons_update(void)
     if (btEncActive_s  && bt1Active_s  && bt2Active_s  && bt3Active_s)
     {
         // go in bootloader mode if press all buttons
+        NEO_writeHue(0, NEO_CYAN, NEO_BRIGHT_KEYS); // set led1 to cyan
+        NEO_writeHue(1, NEO_BLUE, NEO_BRIGHT_KEYS); // set led2 to blue
+        NEO_writeHue(2, NEO_MAG, NEO_BRIGHT_KEYS); //  set led3 to magenta
+        NEO_update();                              // update pixels
         BOOT_now();
     }
 }

@@ -7,7 +7,6 @@
 #include "src/userUsbHidKeyboardMouse/USBHIDKeyboardMouse.h"
 
 //app include
-#include "src/auto_mode.h"
 #include "src/buttons.h"
 #include "src/encoder.h"
 #include "src/keyboard.h"
@@ -52,9 +51,8 @@ void setup()
   }
 
   buttons_setup(PIN_BTN_1, PIN_BTN_2, PIN_BTN_3, PIN_BTN_ENC);
-  keyboard_setup();
   encoder_setup(ENCODER_A, ENCODER_B);
-  led_set_mode(LED_LOOP);
+  led_set_color_hue(NEO_RED, NEO_RED, NEO_RED);
   USBInit();
 }
 
@@ -65,7 +63,6 @@ void loop()
 
   //task update
   buttons_update();
-  auto_update();
   encoder_update();
   led_update();
 
